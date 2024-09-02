@@ -1,0 +1,47 @@
+---
+import Base from "@/layouts/Base.astro";
+import PageHeader from "@/components/PageHeader.astro";
+import { getEntryBySlug } from "astro:content";
+import { Image } from "astro:assets";
+import rachel from "@assets/about/reed.jpg";
+
+const about = await getEntryBySlug("about", "-index");
+const { Content } = await about.render();
+const { title, description } = about.data;
+---
+
+<Base
+  meta_title={title}
+  description={description}
+>
+  <PageHeader title={title} />
+  <section class="section-sm">
+    <div class="container flex">
+      <div class="row justify-center">
+        <div class="col-10">
+          <div class="row items-center flex-col-reverse lg:flex-row">
+            <div class="text-center lg:col-8 lg:text-left">
+              <div class="content">
+                <Content />
+              </div>
+            </div>
+            <div class="my-8 lg:col-4">
+              {
+                rachel && (
+                  <Image
+                    class="mx-auto rounded-lg w-64"
+                    src={rachel}
+                    width={1024}
+                    height={1024}
+                    alt={title}
+                    format="webp"
+                  />
+                )
+              }  
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

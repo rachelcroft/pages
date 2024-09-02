@@ -1,0 +1,41 @@
+---
+import BlogCard from "@/components/BlogCard.astro";
+import config from "@/config/config.json";
+import Base from "@/layouts/Base.astro";
+import { getSinglePage } from "@/lib/contentParser.astro";
+import { getTaxonomy } from "@/lib/taxonomyParser.astro";
+import { lowerHumanize } from "@/lib/utils/textConverter";
+import taxonomyFilter from "@/lib/utils/taxonomyFilter";
+import PageHeader from "@/components/PageHeader.astro";
+
+export async function getStaticPaths() {
+  const tags = await getTaxonomy(config.settings.blog_folder, "tags");
+
+  return tags.map((tag) => {
+    return {
+      params: { tag },
+    };
+  });
+}
+
+const { tag } = Astro.params;
+const posts = await getSinglePage(config.settings.blog_folder);
+const filterByCategories = taxonomyFilter(posts, "tags", tag!);
+---
+
+<Base meta_title={lowerHumanize(tag)}>
+  <PageHeader title={lowerHumanize(tag)}/>
+  <div class="section-sm pb-0">
+    <div class="container">
+      <div class="row justify-center">
+        {
+          filterByCategories.map((post) => (
+            <div class="py-2 md:py-4 md:col-6 lg:col-4">
+              <BlogCard data={post} />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</Base>

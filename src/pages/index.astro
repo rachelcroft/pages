@@ -1,0 +1,28 @@
+---
+import Base from "@/layouts/Base.astro";
+import Background from "@/components/Background.astro";
+import { getEntryBySlug } from "astro:content";
+
+interface Homepage {
+  title: string;
+  meta_title: string;
+}
+
+const homepage = await getEntryBySlug("homepage", "-index");
+const { title }: Homepage = homepage.data;
+---
+
+<Base
+  meta_title={title}
+>
+  <Background />
+  <section class="section pt-14 background-area glob">
+    <div class="container">
+      <div class="row justify-center">
+        <div class="my-16 text-center col-10 md:col-6">
+          <h1 class="mb-4"> Rachel Croft </h1>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

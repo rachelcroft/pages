@@ -1,0 +1,27 @@
+{
+  "site": {
+    "title": "Rachel Croft",
+    "base_url": "https://rachelcro.com",
+    "base_path": "/",
+    "trailing_slash": false,
+    "favicon": "/favicon.ico"
+  },
+
+  "settings": {
+    "search": true,
+    "sticky_header": false,
+    "theme_switcher": true,
+    "default_theme": "system",
+    "blog_pagination": 4,
+    "food_pagination": 6,
+    "summary_length": 200,
+    "blog_folder": "blog",
+    "food_folder": "food"
+  },
+
+  "metadata": {
+    "meta_author": "Rachel Croft",
+    "meta_image": "/favicon.ico",
+    "meta_description": "A place with things."
+  }
+}

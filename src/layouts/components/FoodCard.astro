@@ -1,0 +1,34 @@
+---
+import config from "@/config/config.json";
+import { Image } from "astro:assets";
+
+const {
+  food_folder,
+}: { food_folder: string } = config.settings;
+const { data } = Astro.props;
+const { title, cover } = data.data;
+---
+
+<div class="bg-body dark:bg-darkmode-body">
+  <a href={`/${food_folder}/${data.slug}`}>
+    <div class="relative">
+      {
+        cover && (
+          <Image
+            class="mb-2 w-full rounded"
+            src={cover}
+            alt={title}
+            width={1280}
+            height={720}
+            format="webp"
+          />
+        )
+      }
+      <div class="bg-theme-light bg-opacity-50 dark:bg-darkmode-theme-light dark:bg-opacity-60 rounded absolute bottom-0 px-2 py-1">
+        <h4 class="opacity-70 dark:opacity-70 font-normal">
+          {title}
+        </h4>
+      </div>
+    </div>
+  </a>
+</div>

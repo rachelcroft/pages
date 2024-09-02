@@ -1,0 +1,63 @@
+---
+import FoodCard from "@/components/FoodCard.astro";
+import Pagination from "@/components/Pagination.astro";
+import config from "@/config/config.json";
+import Base from "@/layouts/Base.astro";
+import { getSinglePage } from "@/lib/contentParser.astro";
+import { sortByDate } from "@/lib/utils/sortFunctions";
+import PageHeader from "@/components/PageHeader.astro";
+import { getEntryBySlug } from "astro:content";
+
+const { food_folder } = config.settings;
+const { slug } = Astro.params;
+const postIndex = await getEntryBySlug<any, string>(food_folder, "-index");
+const posts = await getSinglePage(food_folder);
+const sortedPosts = sortByDate(posts);
+const totalPages = Math.ceil(posts.length / config.settings.food_pagination);
+const currentPage = slug && !isNaN(Number(slug)) ? Number(slug) : 1;
+const indexOfLastPost = currentPage * config.settings.food_pagination;
+const indexOfFirstPost = indexOfLastPost - config.settings.food_pagination;
+const currentPosts = sortedPosts.slice(indexOfFirstPost, indexOfLastPost);
+
+export async function getStaticPaths() {
+  const posts = await getSinglePage(config.settings.food_folder);
+  const totalPages = Math.ceil(posts.length / config.settings.food_pagination);
+  const paths = [];
+
+  for (let i = 1; i < totalPages; i++) {
+    paths.push({
+      params: {
+        slug: (i + 1).toString(),
+      },
+    });
+  }
+  return paths;
+}
+---
+
+<Base
+  meta_title={postIndex.data.title}
+  image={postIndex.data.image}
+  description={postIndex.data.description}
+>
+  <PageHeader title={postIndex.data.title} />
+  <section class="section">
+    <div class="container">
+      <!-- food posts -->
+      <div class="row">
+        {
+          currentPosts.map((post) => (
+            <div class="mb-4 md:mb-8 md:col-6 lg:col-4">
+              <FoodCard data={post} />
+            </div>
+          ))
+        }
+      </div>
+      <Pagination
+        section={food_folder}
+        currentPage={currentPage}
+        totalPages={totalPages}
+      />
+    </div>
+  </section>
+</Base>

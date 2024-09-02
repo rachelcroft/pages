@@ -1,0 +1,42 @@
+---
+import FoodCard from "@/components/FoodCard.astro";
+import Pagination from "@/components/Pagination.astro";
+import config from "@/config/config.json";
+import Base from "@/layouts/Base.astro";
+import { getSinglePage } from "@/lib/contentParser.astro";
+import PageHeader from "@/components/PageHeader.astro";
+import { getEntryBySlug } from "astro:content";
+
+const { food_folder } = config.settings;
+const postIndex = await getEntryBySlug<any, string>(food_folder, "-index");
+const posts = await getSinglePage(food_folder);
+const totalPages: number = Math.ceil(posts.length / config.settings.food_pagination);
+const currentPosts = posts.slice(0, config.settings.food_pagination);
+---
+
+<Base
+  meta_title={postIndex.data.title}
+  image={postIndex.data.image}
+  description={postIndex.data.description}
+>
+  <PageHeader title={postIndex.data.title} />
+  <section class="section">
+    <div class="container">
+      <!-- food posts -->
+      <div class="row">
+        {
+          currentPosts.map((post) => (
+            <div class="mb-4 md:mb-8 md:col-6 lg:col-4">
+              <FoodCard data={post} />
+            </div>
+          ))
+        }
+      </div>
+      <Pagination
+        section={food_folder}
+        currentPage={1}
+        totalPages={totalPages}
+      />
+    </div>
+  </section>
+</Base>

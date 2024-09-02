@@ -1,0 +1,29 @@
+---
+import config from "@/config/config.json";
+import Base from "@/layouts/Base.astro";
+import FoodSingle from "@/layouts/FoodSingle.astro";
+import { getSinglePage } from "@/lib/contentParser.astro";
+
+export async function getStaticPaths() {
+  const posts = await getSinglePage(config.settings.food_folder);
+
+  const paths = posts.map((post) => ({
+    params: {
+      single: post.slug,
+    },
+    props: { post },
+  }));
+  return paths;
+}
+
+const { post } = Astro.props;
+const { title, description, image } = post.data;
+---
+
+<Base
+  meta_title={title}
+  description={description}
+  image={image}
+>
+  <FoodSingle post={post} />
+</Base>
