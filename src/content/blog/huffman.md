@@ -57,8 +57,6 @@ In the 50's, MIT PhD student David Huffman had to write a paper proving some cod
 
 5. Build a binary tree for which all the leaves are the original members of $\Omega$, and two nodes share a parent if they were replaced by that parent in step (2).
 
-![Visualization of the Huffman Coding algorithm](@assets/blog/huffman/huffman.png)
-
 Huffman's simple $O(n\log(n))$ algorithm finds an optimal symbol-by-symbol coding. There are alternate methods of coding which perform better under certain circumstances, but even where suboptimal, Huffman is quite good.
 
 ---
